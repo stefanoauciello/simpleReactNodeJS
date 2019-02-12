@@ -2,6 +2,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
+const MongoClient = require('mongodb').MongoClient;
+const url = "mongodb://localhost:27017/";
+
 const crypto = require('crypto');
 
 const secret = 'mykey';
@@ -26,6 +29,16 @@ async function HandleCreateUser(req, res, next) {
     .update(password)
     .digest('hex');
 
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        const dbo = db.db("simpleReactNodeJS");
+        const myobj = {username, password: hash};
+        dbo.collection("user").insertOne(myobj, function(err, res) {
+            if (err) throw err;
+            console.log("1 user inserted in MongoDB");
+            db.close();
+        });
+    });
 
   User.create({
     username,
