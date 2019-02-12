@@ -15,13 +15,14 @@ const Authentication = require('./../authentication');
 router.get('/all', Authentication, HandleAllUsers);
 router.post('/', HandleCreateUser);
 router.get('/login/:username/:password', HandleLoginUser);
+router.delete('/:id', Authentication, HandleDeleteUser);
 
-async function HandleAllUsers(req, res, next) {
+async function HandleAllUsers(req, res) {
   const users = await User.findAll();
   res.json(users);
 }
 
-async function HandleCreateUser(req, res, next) {
+async function HandleCreateUser(req, res) {
   const { password, username } = req.body;
   const hash = crypto.createHmac('sha256', secret)
     .update(password)
@@ -43,7 +44,7 @@ async function HandleCreateUser(req, res, next) {
   res.json({ status: 200 });
 }
 
-async function HandleLoginUser(req, res, next) {
+async function HandleLoginUser(req, res) {
   const { password, username } = req.params;
   const user = await User.findOne({ where: { username } });
   const hash = crypto.createHmac('sha256', secret)
@@ -59,6 +60,25 @@ async function HandleLoginUser(req, res, next) {
     });
   } else {
     res.status(403).send('Wrong Password or Username');
+  }
+}
+
+async function HandleDeleteUser(req, res) {
+  const { id } = req.params;
+  const user = await User.findOne({ where: { id } });
+
+  if (user) {
+    await user.destroy();
+    await UserNoSQL.findOneAndRemove({
+      _id: id,
+    });
+
+    res.json({
+      success: true,
+      message: 'Deleted',
+    });
+  } else {
+    res.status(404).json({ error: 'User not found' });
   }
 }
 
