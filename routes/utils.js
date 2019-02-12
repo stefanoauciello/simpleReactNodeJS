@@ -13,7 +13,8 @@ async function HandleDBJson(req, res) {
   const allData = await Promise.all(models.map(async (model) => {
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const fileModel = require(`./../modelsNoSQL/${model}`);
-    return fileModel.find();
+    const modelObj = { [`${model}`]: await fileModel.find() };
+    return [modelObj];
   }));
 
   res.json(allData);
