@@ -1,4 +1,4 @@
-# simpleReactNodeJS
+# Simple React and NodeJS app
 
 Backend - backend expose simple HTTP REST endpoints
 
