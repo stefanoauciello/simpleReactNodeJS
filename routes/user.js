@@ -29,21 +29,21 @@ async function HandleCreateUser(req, res, next) {
     .update(password)
     .digest('hex');
 
+  const user = await User.create({
+    username,
+    password: hash,
+  });
+
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
         const dbo = db.db("simpleReactNodeJS");
-        const myobj = {username, password: hash};
+        const myobj = {_id: user.id, username, password: hash};
         dbo.collection("user").insertOne(myobj, function(err, res) {
             if (err) throw err;
             console.log("1 user inserted in MongoDB");
             db.close();
         });
     });
-
-  User.create({
-    username,
-    password: hash,
-  });
   res.json({ status: 200 });
 }
 
