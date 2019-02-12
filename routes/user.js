@@ -2,9 +2,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const MongoClient = require('mongodb').MongoClient;
-const url = "mongodb://localhost:27017/";
-
 const crypto = require('crypto');
 
 const secret = 'mykey';
@@ -12,6 +9,7 @@ const secret = 'mykey';
 const router = express.Router();
 
 const User = require('./../models/user');
+const UserNoSQL = require('./../modelsNoSQL/user');
 const Authentication = require('./../authentication');
 
 router.get('/all', Authentication, HandleAllUsers);
@@ -34,16 +32,14 @@ async function HandleCreateUser(req, res, next) {
     password: hash,
   });
 
-    MongoClient.connect(url, function(err, db) {
-        if (err) throw err;
-        const dbo = db.db("simpleReactNodeJS");
-        const myobj = {_id: user.id, username, password: hash};
-        dbo.collection("user").insertOne(myobj, function(err, res) {
-            if (err) throw err;
-            console.log("1 user inserted in MongoDB");
-            db.close();
-        });
-    });
+  const userNoSql = new UserNoSQL({
+    _id: user.id,
+    username: user.username,
+    password: hash,
+  });
+
+  await userNoSql.save();
+
   res.json({ status: 200 });
 }
 
