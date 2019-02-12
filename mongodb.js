@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
-const server = '127.0.0.1:27017'; // REPLACE WITH YOUR DB SERVER
-const database = 'simpleReactNodeJS'; // REPLACE WITH YOUR DB NAME
+const server = '127.0.0.1:27017';
+const database = 'simpleReactNodeJS';
 class Database {
   constructor() {
-    this._connect();
+    this.connect();
   }
 
-  _connect() {
+  // eslint-disable-next-line
+  connect() {
     mongoose.connect(`mongodb://${server}/${database}`)
       .then(() => {
         console.log('MongoDB connected!');
