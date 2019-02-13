@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const Role = require('./../models/role');
-const UserNoSQL = require('./../modelsNoSQL/user');
+const RoleNoSQL = require('./../modelsNoSQL/role');
 const Authentication = require('./../authentication');
 
 router.post('/', Authentication, HandleCreateRole);
@@ -15,7 +15,7 @@ async function HandleCreateRole(req, res) {
 
   const role = await Role.create({ name });
 
-  const roleNoSql = new UserNoSQL({
+  const roleNoSql = new RoleNoSQL({
     _id: role.id,
     name: role.name,
   });
@@ -31,7 +31,7 @@ async function HandleDeleteRole(req, res) {
 
   if (role) {
     await role.destroy();
-    await UserNoSQL.findOneAndRemove({
+    await RoleNoSQL.findOneAndRemove({
       _id: id,
     });
 
