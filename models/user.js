@@ -1,13 +1,26 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./../sequelize');
 
-const user = sequelize.define('user', {
+const User = sequelize.define('user', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+  },
   username: {
     type: Sequelize.STRING,
   },
   password: {
     type: Sequelize.STRING,
   },
+  roleId: {
+    type: Sequelize.STRING,
+  },
 });
 
-module.exports = user;
+User.associate = () => {
+  // eslint-disable-next-line
+  const Role = require('./role');
+  User.belongsTo(Role);
+};
+
+module.exports = User;
