@@ -1,15 +1,25 @@
 const Sequelize = require('sequelize');
-const sequelize = require('./../sequelize');
 
-const Classroom = sequelize.define('classroom', {
-  id: {
-    type: Sequelize.UUID,
-    primaryKey: true,
-    defaultValue: Sequelize.UUIDV4,
-  },
-  name: {
-    type: Sequelize.STRING,
-  },
-});
+const { Model } = require('../dataClasses/model');
 
-module.exports = Classroom;
+class Classroom extends Model {
+  static get modelFields() {
+    return {
+      id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+      },
+      name: {
+        type: Sequelize.STRING,
+      },
+    };
+  }
+
+  static associate() {
+    super.associate();
+    return this;
+  }
+}
+
+module.exports = Classroom.init();

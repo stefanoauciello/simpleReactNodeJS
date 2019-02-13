@@ -1,21 +1,30 @@
 const Sequelize = require('sequelize');
-const sequelize = require('./../sequelize');
 
-const Role = sequelize.define('role', {
-  id: {
-    type: Sequelize.UUID,
-    primaryKey: true,
-    defaultValue: Sequelize.UUIDV4,
-  },
-  name: {
-    type: Sequelize.STRING,
-  },
-});
+const { Model } = require('../dataClasses/model');
 
-Role.associate = () => {
-  // eslint-disable-next-line
+class Role extends Model {
+  static get modelFields() {
+    return {
+      id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+      },
+      name: {
+        type: Sequelize.STRING,
+      },
+    };
+  }
+
+  static associate() {
+    super.associate();
+
+    // eslint-disable-next-line
     const User = require('./user');
-  Role.hasMany(User);
-};
+    Role.hasMany(User);
 
-module.exports = Role;
+    return this;
+  }
+}
+
+module.exports = Role.init();

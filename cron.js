@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const synchro = require('./synchroDatabase');
+const synchro = require('./dataClasses/synchroDatabase');
 
 console.log('cron initialized.');
 

@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(cors({ origin: '*' }));
 
 // connect to mysql
-require('./sequelize');
+require('./dataClasses/sequelize');
 
 // connect to mongodb
 require('./mongodb');

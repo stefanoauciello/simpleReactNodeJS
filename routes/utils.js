@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const synchro = require('./../synchroDatabase');
+const synchro = require('../dataClasses/synchroDatabase');
 
 const router = express.Router();
 const Authentication = require('./../authentication');
