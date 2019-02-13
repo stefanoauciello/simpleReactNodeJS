@@ -25,9 +25,22 @@ fs.readdirSync('./models').forEach(async (file) => {
   file = file.replace('.js', '');
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const model = require(`./models/${file}`);
-  model.sync();
+  await model.sync();
   console.log(`${file} synced() `);
+
+  try {
+    if (await model.count() === 0) {
+      // eslint-disable-next-line
+          require(`./initialData/${file}`);
+      console.log(`${file} inserted data`);
+    } else {
+      console.log(`${await model.count()} records found for ${file}`);
+    }
+  } catch (exc) {
+    console.log(`no file found for ${file}`);
+  }
 });
+
 
 // initialize routes
 fs.readdirSync('./routes').forEach(async (file) => {
