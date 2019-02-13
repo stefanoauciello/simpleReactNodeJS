@@ -19,6 +19,9 @@ require('./sequelize');
 // connect to mongodb
 require('./mongodb');
 
+// initialize cron
+require('./cron');
+
 // initialize models
 fs.readdirSync('./models').forEach(async (file) => {
 // eslint-disable-next-line no-param-reassign
@@ -41,6 +44,12 @@ fs.readdirSync('./models').forEach(async (file) => {
   }
 });
 
+fs.readdirSync('./modelsNoSQL').forEach(async (file) => {
+// eslint-disable-next-line no-param-reassign
+  file = file.replace('.js', '');
+  // eslint-disable-next-line import/no-dynamic-require,global-require
+  require(`./modelsNoSQL/${file}`);
+});
 
 // initialize routes
 fs.readdirSync('./routes').forEach(async (file) => {

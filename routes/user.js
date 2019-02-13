@@ -9,7 +9,6 @@ const secret = 'mykey';
 const router = express.Router();
 
 const User = require('./../models/user');
-const UserNoSQL = require('./../modelsNoSQL/user');
 const Authentication = require('./../authentication');
 
 router.get('/all', Authentication, HandleAllUsers);
@@ -32,16 +31,7 @@ async function HandleCreateUser(req, res) {
     username,
     password: hash,
   });
-
-  const userNoSql = new UserNoSQL({
-    _id: user.id,
-    username: user.username,
-    password: hash,
-  });
-
-  await userNoSql.save();
-
-  res.json({ status: 200 });
+  res.json({ status: 200, data: user });
 }
 
 async function HandleLoginUser(req, res) {
@@ -71,10 +61,6 @@ async function HandleDeleteUser(req, res) {
 
   if (user) {
     await user.destroy();
-    await UserNoSQL.findOneAndRemove({
-      _id: id,
-    });
-
     res.json({
       success: true,
       message: 'Deleted',

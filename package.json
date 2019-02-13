@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node $NODE_DEBUG_OPTION ./bin/www"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "mongoose": "^5.4.11",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.4",
+    "node-cron": "^2.0.3",
     "pug": "2.0.0-beta11",
     "sequelize": "^4.42.0",
     "validator": "^10.11.0"

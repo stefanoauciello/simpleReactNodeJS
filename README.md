@@ -2,7 +2,7 @@
 
 Backend - backend expose simple HTTP REST endpoints
 
-It comunicates with local MySQL and local Mongodb.
+It comunicates with local MySQL and local Mongodb. (Job update every minute MongoDB entities)
 All models are duplicates in both platforms.
 
 It manage Authentication with JWT sign in.
