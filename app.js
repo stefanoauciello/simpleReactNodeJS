@@ -26,6 +26,7 @@ fs.readdirSync('./models').forEach(async (file) => {
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const model = require(`./models/${file}`);
   model.sync();
+  console.log(`${file} synced() `);
 });
 
 // initialize routes

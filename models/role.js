@@ -3,8 +3,9 @@ const sequelize = require('./../sequelize');
 
 const Role = sequelize.define('role', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     primaryKey: true,
+    defaultValue: Sequelize.UUIDV4,
   },
   name: {
     type: Sequelize.STRING,

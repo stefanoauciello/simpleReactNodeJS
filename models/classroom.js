@@ -1,14 +1,15 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./../sequelize');
 
-const classroom = sequelize.define('classroom', {
+const Classroom = sequelize.define('classroom', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     primaryKey: true,
+    defaultValue: Sequelize.UUIDV4,
   },
   name: {
     type: Sequelize.STRING,
   },
 });
 
-module.exports = classroom;
+module.exports = Classroom;

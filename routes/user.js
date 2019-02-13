@@ -51,15 +51,17 @@ async function HandleLoginUser(req, res) {
     .update(password)
     .digest('hex');
 
-  if (hash === user.password) {
-    const token = jwt.sign({ username }, secret, { expiresIn: '24h' });
-    res.json({
-      success: true,
-      message: 'Authentication successful!',
-      token,
-    });
-  } else {
-    res.status(403).send('Wrong Password or Username');
+  if (user) {
+    if (hash === user.password) {
+      const token = jwt.sign({ username }, secret, { expiresIn: '24h' });
+      res.json({
+        success: true,
+        message: 'Authentication successful!',
+        token,
+      });
+    } else {
+      res.status(403).send('Wrong Password or Username');
+    }
   }
 }
 
