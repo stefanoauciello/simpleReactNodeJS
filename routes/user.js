@@ -23,6 +23,9 @@ async function HandleAllUsers(req, res) {
 
 async function HandleCreateUser(req, res) {
   const { password, username } = req.body;
+  if (!password || !username) {
+    return res.status(400).json({ error: 'password or username not found' });
+  }
   const hash = crypto.createHmac('sha256', secret)
     .update(password)
     .digest('hex');
@@ -31,43 +34,50 @@ async function HandleCreateUser(req, res) {
     username,
     password: hash,
   });
-  res.json({ status: 200, data: user });
+  res.status(200).json(user);
 }
 
 async function HandleLoginUser(req, res) {
   const { password, username } = req.params;
+  if (!password || !username) {
+    return res.status(400).json({ error: 'password or username not found' });
+  }
   const user = await User.findOne({ where: { username } });
+  if (!user) {
+    return res.status(404).json({ error: 'user not found' });
+  }
   const hash = crypto.createHmac('sha256', secret)
     .update(password)
     .digest('hex');
 
-  if (user) {
-    if (hash === user.password) {
-      const token = jwt.sign({ username }, secret, { expiresIn: '24h' });
-      res.json({
-        success: true,
-        message: 'Authentication successful!',
-        token,
-      });
-    } else {
-      res.status(403).send('Wrong Password or Username');
-    }
+  if (hash !== user.password) {
+    return res.status(400).json({ error: 'Wrong Password or Username' });
   }
+
+  const token = jwt.sign({ username }, secret, { expiresIn: '24h' });
+  return res.status(200).json({
+    success: true,
+    message: 'Authentication successful!',
+    token,
+  });
 }
 
 async function HandleDeleteUser(req, res) {
   const { id } = req.params;
-  const user = await User.findOne({ where: { id } });
-
-  if (user) {
-    await user.destroy();
-    res.json({
-      success: true,
-      message: 'Deleted',
-    });
-  } else {
-    res.status(404).json({ error: 'User not found' });
+  if (!id) {
+    return res.status(400).json({ error: 'id not found' });
   }
+  const user = await User.findOne({ where: { id } });
+  if (!user) {
+    return res.status(404).json({ error: 'user not found' });
+  }
+
+
+  const destroyed = await user.destroy();
+  res.status(200).json({
+    destroyed,
+    message: 'Deleted',
+  });
 }
 
 module.exports = router;
